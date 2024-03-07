@@ -1,3 +1,2 @@
-main\java\bank\BankAccount.class
-main\java\gestor\GestorSensores.class
-main\java\factorial\Factorial.class
+bank\BankMain.class
+bank\BankAccount.class

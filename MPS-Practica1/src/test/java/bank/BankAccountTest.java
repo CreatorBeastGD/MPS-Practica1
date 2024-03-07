@@ -19,11 +19,22 @@ public class BankAccountTest {
     }
 
     @Test
+    @DisplayName("Se obtiene correctamente el dinero de la cuenta")
+    public void GetBalanceReturnsCorrectBalance() {
+        int result = bank.getBalance();
+        int expected = 100;
+        assertEquals(expected, result);
+    }
+
+    @Test
     @DisplayName("Si se saca 20 euros, el balance será de 80")
     public void IfWithdrawn20Then80EurosInBalance() {
         bank.withdraw(20);
+
         int result = bank.getBalance();
+
         int expected = 80;
+
         assertEquals(expected, result);
     }
 
@@ -40,6 +51,13 @@ public class BankAccountTest {
     @DisplayName("Si se saca más del saldo devuelve falso")
     public void IfWithdrawnLotThenReturnFalse() {
         boolean givenCondition = bank.withdraw(120);
+        assertFalse(givenCondition);
+    }
+
+    @Test
+    @DisplayName("Si se saca un saldo 0 devuelve falso")
+    public void IfWithdrawnZeroThenReturnFalse() {
+        boolean givenCondition = bank.withdraw(0);
         assertFalse(givenCondition);
     }
 
@@ -122,11 +140,9 @@ public class BankAccountTest {
         assertThrows(except, exe, message);
     }
 
-    // Las pruebas que me puso el chatgpt este
     @Test
     @DisplayName("Pago pendiente con valores validos es correcto")
     public void PendingWithValidInputsIsCorrect() {
-        // Arrange
         double totalAmount = 10000.0;
         double interest = 0.05;
         int npayments = 12;
@@ -134,10 +150,8 @@ public class BankAccountTest {
 
         double expected = 5726.67;
 
-        // Act
         double result = bank.pending(totalAmount, interest, npayments, month);
 
-        // Assert
         assertEquals(expected, result, 0.01);
     }
 
@@ -172,7 +186,22 @@ public class BankAccountTest {
     }
 
     @Test
-    @DisplayName("Hacer el pago pendiente durante 0 meses devuelve excepción")
+    @DisplayName("Hacer el pago pendiente con intereses negativos devuelve excepción")
+    public void PendingWithNegativeInterestThrowsException() {
+        double totalAmount = 10000.0;
+        double interest = -0.01;
+        int npayments = 12;
+        int month = 6;
+
+        String message = "Amount cannot be null or negative";
+        Executable exec = () -> bank.pending(totalAmount, interest, npayments, month);
+        Class<IllegalArgumentException> err = IllegalArgumentException.class;
+        
+        assertThrows(err, exec, message);
+    }
+
+    @Test
+    @DisplayName("Hacer el pago pendiente 0 veces devuelve excepción")
     public void PendingWithZeroPaymentsThrowsException() {
         double totalAmount = 10000.0;
         double interest = 0.05;
@@ -187,8 +216,23 @@ public class BankAccountTest {
     }
 
     @Test
+    @DisplayName("Hacer el pago pendiente un numero negativo de veces devuelve excepción")
+    public void PendingWithNegativePaymentsThrowsException() {
+        double totalAmount = 10000.0;
+        double interest = 0.05;
+        int npayments = -1;
+        int month = 6;
+
+        String message = "Amount cannot be null or negative";
+        Executable exec = () -> bank.pending(totalAmount, interest, npayments, month);
+        Class<IllegalArgumentException> err = IllegalArgumentException.class;
+        
+        assertThrows(err, exec, message);
+    }
+
+    @Test
     @DisplayName("Hacer el pago pendiente de 0 meses devuelve la cantidad total")
-    public void testPendingWithZeroMonthReturnsTotalAmount() {
+    public void PendingWithZeroMonthReturnsTotalAmount() {
         double totalAmount = 10000.0;
         double interest = 0.05;
         int npayments = 12;
@@ -204,7 +248,7 @@ public class BankAccountTest {
     public void PendingWithNegativeMonthsThrowsException() {
         double totalAmount = 10000.0;
         double interest = 0.05;
-        int npayments = 0;
+        int npayments = 12;
         int month = -1;
 
         String message = "Amount cannot be null or negative";
