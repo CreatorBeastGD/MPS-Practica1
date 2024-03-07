@@ -124,68 +124,93 @@ public class BankAccountTest {
 
     // Las pruebas que me puso el chatgpt este
     @Test
-    public void testPendingWithValidInputs() {
+    @DisplayName("Pago pendiente con valores validos es correcto")
+    public void PendingWithValidInputsIsCorrect() {
         // Arrange
         double totalAmount = 10000.0;
         double interest = 0.05;
         int npayments = 12;
         int month = 6;
 
+        double expected = 5726.67;
+
         // Act
         double result = bank.pending(totalAmount, interest, npayments, month);
 
         // Assert
-        assertEquals(6149.82, result, 0.01);
+        assertEquals(expected, result, 0.01);
     }
 
     @Test
-    public void testPendingWithNegativeAmount() {
-        // Arrange
+    @DisplayName("Introducir una cantidad negativa devuelve excepción")
+    public void PendingWithNegativeTotalAmountThrowsException() {
         double totalAmount = -10000.0;
         double interest = 0.05;
         int npayments = 12;
         int month = 6;
 
-        // Act & Assert
-        assertThrows(IllegalArgumentException.class, () -> bank.pending(totalAmount, interest, npayments, month));
+        String message = "Amount cannot be null or negative";
+        Executable exec = () -> bank.pending(totalAmount, interest, npayments, month);
+        Class<IllegalArgumentException> err = IllegalArgumentException.class;
+        
+        assertThrows(err, exec, message);
     }
 
     @Test
-    public void testPendingWithZeroInterest() {
-        // Arrange
+    @DisplayName("Hacer el pago pendiente con cero intereses devuelve excepción")
+    public void PendingWithZeroInterestThrowsException() {
         double totalAmount = 10000.0;
         double interest = 0.0;
         int npayments = 12;
         int month = 6;
 
-        // Act & Assert
-        assertThrows(IllegalArgumentException.class, () -> bank.pending(totalAmount, interest, npayments, month));
+        String message = "Amount cannot be null or negative";
+        Executable exec = () -> bank.pending(totalAmount, interest, npayments, month);
+        Class<IllegalArgumentException> err = IllegalArgumentException.class;
+        
+        assertThrows(err, exec, message);
     }
 
     @Test
-    public void testPendingWithZeroPayments() {
-        // Arrange
+    @DisplayName("Hacer el pago pendiente durante 0 meses devuelve excepción")
+    public void PendingWithZeroPaymentsThrowsException() {
         double totalAmount = 10000.0;
         double interest = 0.05;
         int npayments = 0;
         int month = 6;
 
-        // Act & Assert
-        assertThrows(IllegalArgumentException.class, () -> bank.pending(totalAmount, interest, npayments, month));
+        String message = "Amount cannot be null or negative";
+        Executable exec = () -> bank.pending(totalAmount, interest, npayments, month);
+        Class<IllegalArgumentException> err = IllegalArgumentException.class;
+        
+        assertThrows(err, exec, message);
     }
 
     @Test
-    public void testPendingWithZeroMonth() {
-        // Arrange
+    @DisplayName("Hacer el pago pendiente de 0 meses devuelve la cantidad total")
+    public void testPendingWithZeroMonthReturnsTotalAmount() {
         double totalAmount = 10000.0;
         double interest = 0.05;
         int npayments = 12;
         int month = 0;
 
-        // Act
         double result = bank.pending(totalAmount, interest, npayments, month);
 
-        // Assert
-        assertEquals(10000.0, result, 0.01);
+        assertEquals(totalAmount, result);
+    }
+
+    @Test
+    @DisplayName("Hacer el pago pendiente durante -1 meses devuelve excepción")
+    public void PendingWithNegativeMonthsThrowsException() {
+        double totalAmount = 10000.0;
+        double interest = 0.05;
+        int npayments = 0;
+        int month = -1;
+
+        String message = "Amount cannot be null or negative";
+        Executable exec = () -> bank.pending(totalAmount, interest, npayments, month);
+        Class<IllegalArgumentException> err = IllegalArgumentException.class;
+        
+        assertThrows(err, exec, message);
     }
 }

@@ -36,7 +36,7 @@ public class BankAccount {
     // Calculate the pending amount for a loan in a month
     public double pending (double amount, double inte, int npayments, int month){
         double res;
-        if (amount <= 0.0 || inte <= 0.0 || npayments <= 0.0) {
+        if (amount <= 0.0 || inte <= 0.0 || npayments <= 0.0 || month < 0) {
             throw new IllegalArgumentException("Amount cannot be null or negative");
         }
         if(month==0){
