@@ -44,6 +44,7 @@ public class BankAccountTest {
         String message = "Amount cannot be negative";
         Executable exe = () -> bank.withdraw(-1);
         Class<IllegalArgumentException> except = IllegalArgumentException.class;
+        
         assertThrows(except, exe, message);
     }
 
@@ -51,6 +52,7 @@ public class BankAccountTest {
     @DisplayName("Si se saca más del saldo devuelve falso")
     public void IfWithdrawnLotThenReturnFalse() {
         boolean givenCondition = bank.withdraw(120);
+        
         assertFalse(givenCondition);
     }
 
@@ -58,6 +60,7 @@ public class BankAccountTest {
     @DisplayName("Si se saca un saldo 0 devuelve falso")
     public void IfWithdrawnZeroThenReturnFalse() {
         boolean givenCondition = bank.withdraw(0);
+        
         assertFalse(givenCondition);
     }
 
@@ -66,6 +69,7 @@ public class BankAccountTest {
     public void ShownBalanceIsCorrect() {
         int expected = 100;
         int result = bank.getBalance();
+        
         assertEquals(expected, result);
     }
 
@@ -74,6 +78,7 @@ public class BankAccountTest {
     public void BalanceDepositIsDoneCorrectly(){
         int expected = 120;
         int result = bank.deposit(20);
+        
         assertEquals(expected, result);
     }
 
@@ -83,6 +88,7 @@ public class BankAccountTest {
         String message = "Amount cannot be negative";
         Executable exe = () -> bank.deposit(-1);
         Class<IllegalArgumentException> except = IllegalArgumentException.class;
+        
         assertThrows(except, exe, message);
     }
 
@@ -94,8 +100,9 @@ public class BankAccountTest {
         int npayments = 12;
 
         double result = bank.payment(amount, interest, npayments);
+        double expected = 1128.25;
 
-        assertEquals(1128.25, result, 0.01);
+        assertEquals(expected, result, 0.01);
     }
 
     @Test
@@ -201,7 +208,7 @@ public class BankAccountTest {
     }
 
     @Test
-    @DisplayName("Hacer el pago pendiente 0 veces devuelve excepción")
+    @DisplayName("Hacer el pago pendiente de 0 pagos devuelve excepción")
     public void PendingWithZeroPaymentsThrowsException() {
         double totalAmount = 10000.0;
         double interest = 0.05;
@@ -241,6 +248,20 @@ public class BankAccountTest {
         double result = bank.pending(totalAmount, interest, npayments, month);
 
         assertEquals(totalAmount, result);
+    }
+
+    @Test
+    @DisplayName("Hacer el pago pendiente de un mes mayor o igual al numero de pagos devuelve 0")
+    public void PendingWithMoreMonthsThanPaymentsReturnsZero() {
+        double totalAmount = 10000.0;
+        double interest = 0.05;
+        int npayments = 12;
+        int month = 33;
+
+        double result = bank.pending(totalAmount, interest, npayments, month);
+        double expected = 0;
+
+        assertEquals(expected, result);
     }
 
     @Test

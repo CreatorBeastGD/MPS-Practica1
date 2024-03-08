@@ -16,7 +16,7 @@ public class BankAccount {
         return false;
     }
     public int deposit(int amount) {
-        if (amount <0)
+        if (amount < 0)
             throw new IllegalArgumentException("Amount cannot be negative");
         balance += amount;
         return balance;
@@ -36,12 +36,13 @@ public class BankAccount {
     // Calculate the pending amount for a loan in a month
     public double pending (double amount, double inte, int npayments, int month){
         double res;
-        if (amount <= 0.0 || inte <= 0.0 || npayments <= 0 || month < 0) {
+        if (month < 0 || amount <= 0.0 || inte <= 0.0 || npayments <= 0) {
             throw new IllegalArgumentException("Amount cannot be null or negative");
-        }
-        if(month==0){
+        } else if(month == 0){
             res=amount;
-        }else{
+        } else if (month >= npayments) {
+            res = 0;
+        } else{
             double ant=pending(amount, inte, npayments, month-1);
             res = ant - (payment(amount,inte,npayments) - inte*ant);
         }

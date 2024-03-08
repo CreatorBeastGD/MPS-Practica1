@@ -16,7 +16,7 @@ public class BankAccount {
 <span class="fc" id="L16">        return false;</span>
     }
     public int deposit(int amount) {
-<span class="fc bfc" id="L19" title="All 2 branches covered.">        if (amount &lt;0)</span>
+<span class="fc bfc" id="L19" title="All 2 branches covered.">        if (amount &lt; 0)</span>
 <span class="fc" id="L20">            throw new IllegalArgumentException(&quot;Amount cannot be negative&quot;);</span>
 <span class="fc" id="L21">        balance += amount;</span>
 <span class="fc" id="L22">        return balance;</span>
@@ -36,16 +36,17 @@ public class BankAccount {
     // Calculate the pending amount for a loan in a month
     public double pending (double amount, double inte, int npayments, int month){
         double res;
-<span class="fc bfc" id="L39" title="All 8 branches covered.">        if (amount &lt;= 0.0 || inte &lt;= 0.0 || npayments &lt;= 0 || month &lt; 0) {</span>
+<span class="fc bfc" id="L39" title="All 8 branches covered.">        if (month &lt; 0 || amount &lt;= 0.0 || inte &lt;= 0.0 || npayments &lt;= 0) {</span>
 <span class="fc" id="L40">            throw new IllegalArgumentException(&quot;Amount cannot be null or negative&quot;);</span>
+<span class="fc bfc" id="L41" title="All 2 branches covered.">        } else if(month == 0){</span>
+<span class="fc" id="L42">            res=amount;</span>
+<span class="fc bfc" id="L43" title="All 2 branches covered.">        } else if (month &gt;= npayments) {</span>
+<span class="fc" id="L44">            res = 0;</span>
+        } else{
+<span class="fc" id="L46">            double ant=pending(amount, inte, npayments, month-1);</span>
+<span class="fc" id="L47">            res = ant - (payment(amount,inte,npayments) - inte*ant);</span>
         }
-<span class="fc bfc" id="L42" title="All 2 branches covered.">        if(month==0){</span>
-<span class="fc" id="L43">            res=amount;</span>
-        }else{
-<span class="fc" id="L45">            double ant=pending(amount, inte, npayments, month-1);</span>
-<span class="fc" id="L46">            res = ant - (payment(amount,inte,npayments) - inte*ant);</span>
-        }
-<span class="fc" id="L48">        return res;</span>
+<span class="fc" id="L49">        return res;</span>
     }
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.4.201905082037</span></div></body></html>
